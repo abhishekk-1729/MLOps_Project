@@ -1,15 +1,15 @@
 import logging
-import mlflow
+# import mlflow
 import pandas as pd
 from zenml import step
 from src.evaluation import MSE, RMSE, R2;
 from sklearn.base import RegressorMixin
 from typing_extensions import Annotated
 from typing import Tuple
-from zenml.client import Client
-experiment_tracker = Client().active_stack._experiment_tracker
+# from zenml.client import Client
+# experiment_tracker = Client().active_stack._experiment_tracker
 
-@step(experiment_tracker=experiment_tracker.name)
+@step()
 def evaluate_model(model:RegressorMixin,
                    X_test:pd.DataFrame,
                    y_test:pd.DataFrame,
@@ -19,15 +19,15 @@ def evaluate_model(model:RegressorMixin,
         prediction = model.predict(X_test)
         mse_class = MSE()
         mse = mse_class.calculate_scores(y_test,prediction)
-        mlflow.log_metric("mse",mse)
+        # mlflow.log_metric("mse",mse)
 
         r2_class = R2()
         r2_score = r2_class.calculate_scores(y_test,prediction)
-        mlflow.log_metric("r2_score",r2_score)
+        # mlflow.log_metric("r2_score",r2_score)
 
         rmse_class = RMSE()
         rmse = rmse_class.calculate_scores(y_test,prediction)
-        mlflow.log_metric("rmse_score",rmse)
+        # mlflow.log_metric("rmse_score",rmse)
 
         return r2_score,rmse
     
